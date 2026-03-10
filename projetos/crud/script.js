@@ -33,7 +33,7 @@ function renderizarUsuarios() {
         botaoEditar.addEventListener('click', () => {
             const novoNome = prompt('Digite o novo nome');
 
-            usuarios[index] = novoNome;
+            usuarios[index].nome = novoNome;
 
             // persistencia de dados
             localStorage.setItem('usuarios', JSON.stringify(usuarios));
@@ -41,7 +41,7 @@ function renderizarUsuarios() {
             renderizarUsuarios();
         });
 
-        li.textContent = usuario + ' ';
+        li.textContent = usuario.nome + ' ';
         
         li.appendChild(botaoExcluir);
         li.appendChild(botaoEditar);
@@ -62,7 +62,12 @@ btnAdicionar.addEventListener('click', () => {
         return;
     }
 
-    usuarios.push(nome);
+    const novousuario = {
+        id: Date.now(),
+        nome: nome
+    };
+
+    usuarios.push(novousuario);
 
     // persistencia de dados
     localStorage.setItem('usuarios', JSON.stringify(usuarios));
