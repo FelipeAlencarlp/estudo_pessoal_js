@@ -2,8 +2,8 @@ const inputUsuario = document.querySelector('#inputUsuario');
 const btnAdicionar = document.querySelector('#btnAdicionar');
 const listaUsuarios = document.querySelector('#listaUsuarios');
 
-// banco de dados simulado com array
-let usuarios = [];
+// banco de dados simulado com localStorage ou array
+let usuarios = JSON.parse(localStorage.getItem('usuarios')) || [];
 
 // função para renderizar usuário
 function renderizarUsuarios() {
@@ -23,6 +23,9 @@ function renderizarUsuarios() {
             usuarios.splice(index, 1);
             // splice() -> remove o indice, com 1 quantidade
 
+            // persistencia de dados
+            localStorage.setItem('usuarios', JSON.stringify(usuarios));
+
             renderizarUsuarios();
         });
 
@@ -31,6 +34,9 @@ function renderizarUsuarios() {
             const novoNome = prompt('Digite o novo nome');
 
             usuarios[index] = novoNome;
+
+            // persistencia de dados
+            localStorage.setItem('usuarios', JSON.stringify(usuarios));
 
             renderizarUsuarios();
         });
@@ -47,9 +53,21 @@ function renderizarUsuarios() {
 
 // criar usuário
 btnAdicionar.addEventListener('click', () => {
-    const nome = inputUsuario.value;
+    const nome = inputUsuario.value.trim();
+    // trim() -> remove espaços vazios
+
+    // validação
+    if (!nome) {
+        alert('Digite um nome válido!');
+        return;
+    }
 
     usuarios.push(nome);
+
+    // persistencia de dados
+    localStorage.setItem('usuarios', JSON.stringify(usuarios));
+    // localStorage só aceita string, JSON.stringify
+    // converte o array para string
 
     renderizarUsuarios();
 
