@@ -2,15 +2,19 @@ const inputNome = document.querySelector('#inputNome');
 const inputEmail = document.querySelector('#inputEmail');
 const inputTelefone = document.querySelector('#inputTelefone');
 const btnAdicionar = document.querySelector('#btnAdicionar');
-const listaUsuarios = document.querySelector('#listaUsuarios');
 const inputBusca = document.querySelector('#inputBusca');
+const listaUsuarios = document.querySelector('#listaUsuarios');
 
 // banco de dados simulado com localStorage ou array
 let usuarios = carregarUsuarios();
 
-let termoBusca = '';
+// variável de controle para o botão ADICIONAR
+// vai decidir se Cria novo ou Salva edição
+let usuarioEditandoId = null;
 
 // busca de usuários
+let termoBusca = '';
+
 inputBusca.addEventListener('input', (event) => {
     termoBusca = event.target.value.toLowerCase();
 
@@ -73,6 +77,61 @@ function renderizarUsuarios() {
 
 // criar usuário
 btnAdicionar.addEventListener('click', () => {
+    if (usuarioEditandoId) {
+        atualizarUsuario();
+    } else {
+        adicionarUsuario();
+    }
+});
+
+// função para remover usuário da lista
+function removerUsuario(id) {
+    const confirmar = confirm('Tem certeza que deseja excluir este usuário?');
+
+    if (!confirmar) return;
+
+    const index = usuarios.findIndex(usuario => usuario.id === id);
+
+    if (index !== -1) {
+        usuarios.splice(index, 1);
+        // splice() -> index e quantidade
+
+        // persistencia de dados
+        salvarUsuarios();
+
+        renderizarUsuarios();
+    }
+}
+
+// função para editar usuário da lista
+function editarUsuario(id) {
+    const usuario = usuarios.find(usuario => usuario.id === id);
+
+    inputNome.value = usuario.nome;
+    inputEmail.value = usuario.email;
+    inputTelefone.value = usuario.telefone;
+
+    usuarioEditandoId = id;
+}
+
+// função para atualizar usuário
+function atualizarUsuario() {
+    const usuario = usuarios.find(usuario => usuario.id === usuarioEditandoId);
+
+    usuario.nome = inputNome.value;
+    usuario.email = inputEmail.value;
+    usuario.telefone = inputTelefone.value;
+
+    salvarUsuarios();
+    renderizarUsuarios();
+
+    usuarioEditandoId = null;
+
+    limparInputs();
+}
+
+// função para adicionar usuário
+function adicionarUsuario() {
     const nome = inputNome.value.trim();
     const email = inputEmail.value.trim();
     const telefone = inputTelefone.value.trim();
@@ -106,45 +165,15 @@ btnAdicionar.addEventListener('click', () => {
     salvarUsuarios();
 
     renderizarUsuarios();
-    
+
+    limparInputs();
+}
+
+// função para limpar imputs
+function limparInputs() {
     inputNome.value = '';
     inputEmail.value = '';
     inputTelefone.value = '';
-});
-
-// função para remover usuário da lista
-function removerUsuario(id) {
-    const confirmar = confirm('Tem certeza que deseja excluir este usuário?');
-
-    if (!confirmar) return;
-
-    const index = usuarios.findIndex(usuario => usuario.id === id);
-
-    if (index !== -1) {
-        usuarios.splice(index, 1);
-        // splice() -> index e quantidade
-
-        // persistencia de dados
-        salvarUsuarios();
-
-        renderizarUsuarios();
-    }
-}
-
-// função para editar usuário da lista
-function editarUsuario(id) {
-    const usuario = usuarios.find(usuario => usuario.id === id);
-
-    const novoNome = prompt('Digite o novo nome:').trim();
-
-    if (!novoNome) return;
-
-    usuario.nome = novoNome;
-
-    // persistencia de dados
-    salvarUsuarios();
-
-    renderizarUsuarios();
 }
 
 renderizarUsuarios();

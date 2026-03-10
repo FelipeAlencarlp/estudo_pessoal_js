@@ -1,0 +1,136 @@
+Antes de iniciar um CRUD é preciso pensar nessas 6 camadas mentais:
+
+1 -> Entidade (o que estou gerenciando/criando)
+2 -> Estrutura de dados
+3 -> Operações do CRUD
+4 -> Interface do usuário
+5 -> Persistência de dados
+6 -> Fluxo da aplicação
+
+-------------------------------------------------------------------
+
+1. ENTIDADE (O QUE O SISTEMA GERENCIA)
+
+Primeira pergunta:
+    Qual é o obejto do sistema?
+
+Exemplos:
+    Usuário
+    Produto
+    Pedido
+    Tarefa
+    Cliente
+
+-------------------------------------------------------------------
+
+2. ESTRUTURA DE DADOS
+
+Agora é definido como esse objeto é representado.
+
+Exemplo:
+    {
+        id: '...',
+        nome: '...',
+        email: '...',
+        telefone: '...'
+    }
+Isso define o modelo da entidade.
+
+-------------------------------------------------------------------
+
+3. OPERAÇÕES DO CRUD
+
+Agora é definido o que pode ser feito com esse objeto.
+
+CRUD significa:
+    Create
+    Read
+    Update
+    Delete
+
+Então mentalmente cria-se:
+    criarUsuario()
+    listarUsuarios()
+    editarUsuario()
+    removerUsuario()
+
+-------------------------------------------------------------------
+
+4. INTERFACE (UI)
+
+Agora pense-se:
+    Como o usuário interage com o sistema?
+
+Exemplo:
+    Inputs
+    Botões
+    Lista
+    Busca
+
+-------------------------------------------------------------------
+
+5. PERSISTÊNCIA
+
+Agora a pergunta:
+    Onde os dados ficam guardados?
+
+Possibilidades:
+    localStorage
+    API
+    Banco de dados
+
+-------------------------------------------------------------------
+
+6. FLUXO DA APLICAÇÃO
+
+Agora se pensa no fluco da aplicação.
+
+Exemplo mental:
+    Usuário abre página
+    \/
+    carregar usuários salvos
+    \/
+    renderizar lista
+    \/
+    usuário adiciona novo usuário
+    \/
+    salvar
+    \/
+    renderizar novamente
+Esse fluxo é essencial.
+
+-------------------------------------------------------------------
+
+Como começar um CRUD
+
+Ordem mental:
+    1 -> definir entidade
+    2 -> criar estrutura de dados
+    3 -> criar array principal
+    4 -> criar renderização
+    5 -> criar CREATE
+    6 -> criar DELETE
+    7 -> criar UPDATE
+    8 -> adicionar melhorias
+
+-------------------------------------------------------------------
+
+DICA:
+    Sempre pensar:
+        dados -> lógica -> interface
+
+    Antes de programar, escreva:
+        ENTIDADE?
+            Usuario
+
+        CAMPOS?
+            id
+            nome
+            email
+            telefone
+
+        FUNÇÕES?
+            criar
+            listar
+            editar
+            remover
