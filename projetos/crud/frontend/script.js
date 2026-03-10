@@ -5,7 +5,6 @@ const btnAdicionar = document.querySelector('#btnAdicionar');
 const inputBusca = document.querySelector('#inputBusca');
 const listaUsuarios = document.querySelector('#listaUsuarios');
 
-// banco de dados simulado com localStorage ou array
 let usuarios = carregarUsuarios();
 
 // variável de controle para o botão ADICIONAR
@@ -22,19 +21,94 @@ inputBusca.addEventListener('input', (event) => {
 });
 
 // função para carregar usuários
-function carregarUsuarios() {
-    const dados = localStorage.getItem('usuarios');
+async function carregarUsuarios() {
+    const resposta = await fetch('http://localhost:3000/usuarios');
 
-    if (!dados) return [];
+    usuarios = await resposta.json();
 
-    return JSON.parse(dados);
+    renderizarUsuarios();
 }
 
-// função para salvar usuário
-function salvarUsuarios() {
-    localStorage.setItem('usuarios', JSON.stringify(usuarios));
-    // localStorage só aceita string, então utiliza-se JSON.stringify
-    // que converte o array para string
+// função para adicionar usuário
+async function adicionarUsuario() {
+    const nome = inputNome.value.trim();
+    const email = inputEmail.value.trim();
+    const telefone = inputTelefone.value.trim();
+
+    if (!nome || !email || !telefone) {
+        alert('Obrigatório preencher todos os campos!');
+        return;
+    }
+
+    const usuario = {
+        nome: nome,
+        email: email,
+        telefone: telefone
+    };
+
+    const emailExiste = usuarios.some(usuario => usuario.email === inputEmail.value);
+    // some() -> verifica se algum item do array atende a condição
+
+    if (emailExiste) {
+        alert('Este e-mail já está em uso!');
+        return;
+    }
+    
+    await fetch('http://localhost:3000/usuarios', {
+        method: 'POST',
+        headers: {
+            'Content-Type':'application/json'
+        },
+        body: JSON.stringify(usuario)
+    });
+
+    carregarUsuarios();
+    limparInputs();
+}
+
+// função para remover usuário da lista
+async function removerUsuario(id) {
+    const confirmar = confirm('Tem certeza que deseja excluir este usuário?');
+
+    if (!confirmar) return;
+
+    await fetch(`http://localhost:3000/usuarios/${id}`, {
+        method: 'DELETE'
+    });
+
+    carregarUsuarios();
+    limparInputs();
+}
+
+// função para atualizar usuário
+async function atualizarUsuario() {
+    const nome = inputNome.value.trim();
+    const email = inputEmail.value.trim();
+    const telefone = inputTelefone.value.trim();
+
+    if (!nome || !email || !telefone) {
+        alert('Não é possível salvar dados em branco!');
+        return;
+    }
+
+    const usuario = {
+        nome: nome,
+        email: email,
+        telefone: telefone
+    };
+
+    await fetch(`http://localhost:3000/usuarios/${usuarioEditandoId}`, {
+        method: 'PUT',
+        headers: {
+            'Content-Type':'application/json'
+        },
+        body: JSON.stringify(usuario)
+    });
+
+    carregarUsuarios();
+    limparInputs();
+
+    usuarioEditandoId = null;
 }
 
 // função para renderizar usuário
@@ -84,25 +158,6 @@ btnAdicionar.addEventListener('click', () => {
     }
 });
 
-// função para remover usuário da lista
-function removerUsuario(id) {
-    const confirmar = confirm('Tem certeza que deseja excluir este usuário?');
-
-    if (!confirmar) return;
-
-    const index = usuarios.findIndex(usuario => usuario.id === id);
-
-    if (index !== -1) {
-        usuarios.splice(index, 1);
-        // splice() -> index e quantidade
-
-        // persistencia de dados
-        salvarUsuarios();
-
-        renderizarUsuarios();
-    }
-}
-
 // função para editar usuário da lista
 function editarUsuario(id) {
     const usuario = usuarios.find(usuario => usuario.id === id);
@@ -114,66 +169,9 @@ function editarUsuario(id) {
     usuarioEditandoId = id;
 }
 
-// função para atualizar usuário
-function atualizarUsuario() {
-    const usuario = usuarios.find(usuario => usuario.id === usuarioEditandoId);
-
-    usuario.nome = inputNome.value;
-    usuario.email = inputEmail.value;
-    usuario.telefone = inputTelefone.value;
-
-    salvarUsuarios();
-    renderizarUsuarios();
-
-    usuarioEditandoId = null;
-
-    limparInputs();
-}
-
-// função para adicionar usuário
-function adicionarUsuario() {
-    const nome = inputNome.value.trim();
-    const email = inputEmail.value.trim();
-    const telefone = inputTelefone.value.trim();
-
-    // validação
-    if (!nome || !email || !telefone) {
-        alert('Obrigatório preencher todos os campos!');
-        return;
-    }
-
-    // objeto do usuário
-    const novoUsuario = {
-        id: Date.now(),
-        nome: nome,
-        email: email,
-        telefone: telefone
-    };
-
-    const emailExiste = usuarios.some(usuario => usuario.email === inputEmail.value);
-    // some() -> verifica se algum item do array atende a condição
-
-    if (emailExiste) {
-        alert('Este e-mail já está em uso!');
-        return;
-    }
-
-    usuarios.push(novoUsuario);
-    alert('Usuário cadastrado com sucesso!');
-    
-    // persistencia de dados
-    salvarUsuarios();
-
-    renderizarUsuarios();
-
-    limparInputs();
-}
-
 // função para limpar imputs
 function limparInputs() {
     inputNome.value = '';
     inputEmail.value = '';
     inputTelefone.value = '';
 }
-
-renderizarUsuarios();
