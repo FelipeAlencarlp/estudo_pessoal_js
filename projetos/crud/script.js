@@ -1,9 +1,21 @@
-const inputUsuario = document.querySelector('#inputUsuario');
+const inputNome = document.querySelector('#inputNome');
+const inputEmail = document.querySelector('#inputEmail');
+const inputTelefone = document.querySelector('#inputTelefone');
 const btnAdicionar = document.querySelector('#btnAdicionar');
 const listaUsuarios = document.querySelector('#listaUsuarios');
+const inputBusca = document.querySelector('#inputBusca');
 
 // banco de dados simulado com localStorage ou array
 let usuarios = carregarUsuarios();
+
+let termoBusca = '';
+
+// busca de usuários
+inputBusca.addEventListener('input', (event) => {
+    termoBusca = event.target.value.toLowerCase();
+
+    renderizarUsuarios();
+});
 
 // função para carregar usuários
 function carregarUsuarios() {
@@ -25,29 +37,34 @@ function salvarUsuarios() {
 function renderizarUsuarios() {
     listaUsuarios.innerHTML = '';
 
-    usuarios.forEach((usuario) => {
+    const usuariosFiltrados = usuarios.filter(usuario =>
+        usuario.nome.toLowerCase().includes(termoBusca) ||
+        usuario.email.toLowerCase().includes(termoBusca)
+    );
+
+    usuariosFiltrados.forEach((usuario) => {
         const li = document.createElement('li');
 
-        const botaoExcluir = document.createElement('button');
-        botaoExcluir.textContent = 'Excluir';
-
+        // editar usuário
         const botaoEditar = document.createElement('button');
         botaoEditar.textContent = 'Editar';
-
-        // excluir usuário
-        botaoExcluir.addEventListener('click', () => {
-            removerUsuario(usuario.id);
-        });
-
-        // editar usuário
+        
         botaoEditar.addEventListener('click', () => {
             editarUsuario(usuario.id);
         });
 
-        li.textContent = usuario.nome + ' ';
+        // excluir usuário
+        const botaoExcluir = document.createElement('button');
+        botaoExcluir.textContent = 'Excluir';
+
+        botaoExcluir.addEventListener('click', () => {
+            removerUsuario(usuario.id);
+        });
+
+        li.textContent = `${usuario.nome} | ${usuario.email} | ${usuario.telefone} `;
         
-        li.appendChild(botaoExcluir);
         li.appendChild(botaoEditar);
+        li.appendChild(botaoExcluir);
 
         // listar usuário
         listaUsuarios.appendChild(li);
@@ -56,33 +73,51 @@ function renderizarUsuarios() {
 
 // criar usuário
 btnAdicionar.addEventListener('click', () => {
-    const nome = inputUsuario.value.trim();
-    // trim() -> remove espaços vazios
+    const nome = inputNome.value.trim();
+    const email = inputEmail.value.trim();
+    const telefone = inputTelefone.value.trim();
 
     // validação
-    if (!nome) {
-        alert('Digite um nome válido!');
+    if (!nome || !email || !telefone) {
+        alert('Obrigatório preencher todos os campos!');
         return;
     }
 
     // objeto do usuário
-    const novousuario = {
+    const novoUsuario = {
         id: Date.now(),
-        nome: nome
+        nome: nome,
+        email: email,
+        telefone: telefone
     };
 
-    usuarios.push(novousuario);
+    const emailExiste = usuarios.some(usuario => usuario.email === inputEmail.value);
+    // some() -> verifica se algum item do array atende a condição
 
+    if (emailExiste) {
+        alert('Este e-mail já está em uso!');
+        return;
+    }
+
+    usuarios.push(novoUsuario);
+    alert('Usuário cadastrado com sucesso!');
+    
     // persistencia de dados
     salvarUsuarios();
 
     renderizarUsuarios();
-
-    inputUsuario.value = '';
+    
+    inputNome.value = '';
+    inputEmail.value = '';
+    inputTelefone.value = '';
 });
 
 // função para remover usuário da lista
 function removerUsuario(id) {
+    const confirmar = confirm('Tem certeza que deseja excluir este usuário?');
+
+    if (!confirmar) return;
+
     const index = usuarios.findIndex(usuario => usuario.id === id);
 
     if (index !== -1) {
@@ -111,3 +146,5 @@ function editarUsuario(id) {
 
     renderizarUsuarios();
 }
+
+renderizarUsuarios();

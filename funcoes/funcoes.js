@@ -43,6 +43,12 @@ const soma2 = (a, b) => {
 const soma = (a, b) => a + b;
 //  - se tem uma única expressão, posso omitir {} e "return"
 
+/*
+    ***PARA LEMBRAR SOBRE ARROW FUNCTION:
+        Arrow function sem {} -> RETURN automático
+        Arrow function com {} -> precisa usar RETURN
+*/
+
 // ------------------------------------------------------------
 
 // Escopo -> aqui começa a ficar mais interessante
