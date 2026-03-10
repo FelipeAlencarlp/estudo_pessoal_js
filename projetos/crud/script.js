@@ -3,13 +3,29 @@ const btnAdicionar = document.querySelector('#btnAdicionar');
 const listaUsuarios = document.querySelector('#listaUsuarios');
 
 // banco de dados simulado com localStorage ou array
-let usuarios = JSON.parse(localStorage.getItem('usuarios')) || [];
+let usuarios = carregarUsuarios();
+
+// função para carregar usuários
+function carregarUsuarios() {
+    const dados = localStorage.getItem('usuarios');
+
+    if (!dados) return [];
+
+    return JSON.parse(dados);
+}
+
+// função para salvar usuário
+function salvarUsuarios() {
+    localStorage.setItem('usuarios', JSON.stringify(usuarios));
+    // localStorage só aceita string, então utiliza-se JSON.stringify
+    // que converte o array para string
+}
 
 // função para renderizar usuário
 function renderizarUsuarios() {
     listaUsuarios.innerHTML = '';
 
-    usuarios.forEach((usuario, index) => {
+    usuarios.forEach((usuario) => {
         const li = document.createElement('li');
 
         const botaoExcluir = document.createElement('button');
@@ -20,25 +36,12 @@ function renderizarUsuarios() {
 
         // excluir usuário
         botaoExcluir.addEventListener('click', () => {
-            usuarios.splice(index, 1);
-            // splice() -> remove o indice, com 1 quantidade
-
-            // persistencia de dados
-            localStorage.setItem('usuarios', JSON.stringify(usuarios));
-
-            renderizarUsuarios();
+            removerUsuario(usuario.id);
         });
 
         // editar usuário
         botaoEditar.addEventListener('click', () => {
-            const novoNome = prompt('Digite o novo nome');
-
-            usuarios[index].nome = novoNome;
-
-            // persistencia de dados
-            localStorage.setItem('usuarios', JSON.stringify(usuarios));
-
-            renderizarUsuarios();
+            editarUsuario(usuario.id);
         });
 
         li.textContent = usuario.nome + ' ';
@@ -62,6 +65,7 @@ btnAdicionar.addEventListener('click', () => {
         return;
     }
 
+    // objeto do usuário
     const novousuario = {
         id: Date.now(),
         nome: nome
@@ -70,11 +74,40 @@ btnAdicionar.addEventListener('click', () => {
     usuarios.push(novousuario);
 
     // persistencia de dados
-    localStorage.setItem('usuarios', JSON.stringify(usuarios));
-    // localStorage só aceita string, JSON.stringify
-    // converte o array para string
+    salvarUsuarios();
 
     renderizarUsuarios();
 
     inputUsuario.value = '';
 });
+
+// função para remover usuário da lista
+function removerUsuario(id) {
+    const index = usuarios.findIndex(usuario => usuario.id === id);
+
+    if (index !== -1) {
+        usuarios.splice(index, 1);
+        // splice() -> index e quantidade
+
+        // persistencia de dados
+        salvarUsuarios();
+
+        renderizarUsuarios();
+    }
+}
+
+// função para editar usuário da lista
+function editarUsuario(id) {
+    const usuario = usuarios.find(usuario => usuario.id === id);
+
+    const novoNome = prompt('Digite o novo nome:').trim();
+
+    if (!novoNome) return;
+
+    usuario.nome = novoNome;
+
+    // persistencia de dados
+    salvarUsuarios();
+
+    renderizarUsuarios();
+}
