@@ -171,3 +171,33 @@ Antes de programa, é preciso entender o papel de cada camada:
             |---usuariosService.js
     **Isso é um conceito muito importante chamado:
         Semparação de responsabilidades
+
+-------------------------------------------------------------------
+
+CONECTAR PostgresSQL ao NODE
+    No terminal:
+        npm install pg
+    - É o driver oficial do PostgresSQL para Node.
+      Permite:
+        Node -> conectar -> banco
+
+    Pasta nova:
+        database
+            |---connection.js
+
+    FLUXO MENTAL PARA GUARDAR:
+        Frontend
+        \/
+        Route
+        \/
+        Controller
+        \/
+        Service
+        \/
+        PostgresSQL
+        \/
+        Service
+        \/
+        Controller
+        \/
+        Response JSON
