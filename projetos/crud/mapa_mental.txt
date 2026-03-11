@@ -134,3 +134,40 @@ DICA:
             listar
             editar
             remover
+
+-------------------------------------------------------------------
+
+ARQUITETURA USADA EM NODE:
+    Routes -> Controllers -> Services
+
+Antes de programa, é preciso entender o papel de cada camada:
+    Imagine um restaurante:
+
+        CLIENTE
+        faz o pedido
+        GARÇOM
+        ano o pedido
+        COZINHA
+        prepara a comida
+
+    No backend é parecido:
+        Cliente -> Frontend
+        Garçom -> Routes
+        Gerente -> Controller
+        Cozinha -> Service
+
+    Exemplo de Arquitetura:
+        backend
+        |
+        |---server.js
+        |
+        |---routes
+        |   |---usuariosRoutes.js
+        |
+        |---controllers
+        |   |---usuariosController.js
+        |
+        |---services
+            |---usuariosService.js
+    **Isso é um conceito muito importante chamado:
+        Semparação de responsabilidades
