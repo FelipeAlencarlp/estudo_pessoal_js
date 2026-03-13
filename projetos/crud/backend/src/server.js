@@ -1,5 +1,7 @@
 require('dotenv').config();
 
+const errorMiddleware = require('./middlewares/errorMiddleware');
+
 const express = require('express');
 const usuariosRoutes = require('./routes/usuariosRoutes');
 const cors = require('cors');
@@ -15,3 +17,5 @@ app.use('/usuarios', usuariosRoutes);
 app.listen(process.env.PORT, () => {
     console.log('Servidor rodando na porta 3000');
 });
+
+app.use(errorMiddleware);
