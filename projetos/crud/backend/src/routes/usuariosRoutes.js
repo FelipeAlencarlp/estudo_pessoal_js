@@ -7,6 +7,8 @@ const usuariosController = require('../controllers/usuariosController');
 
 router.get('/', usuariosController.listarUsuarios);
 
+router.get('/:id', usuariosController.buscarUsuario);
+
 router.post('/', usuariosController.criarUsuario);
 
 router.put('/:id', usuariosController.atualizarUsuario);

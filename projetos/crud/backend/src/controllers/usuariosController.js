@@ -3,17 +3,29 @@
 // Não deve conter lógica pesada
 const usuariosService = require('../services/usuariosService');
 const asyncHandler = require('../middlewares/asyncHandler');
+const { successResponse } = require('../utils/response');
+const AppError = require('../utils/AppError');
 
 const listarUsuarios = asyncHandler(async (req, res) => {
     const usuarios = await usuariosService.listarUsuarios();
 
-    res.json(usuarios);
+    successResponse(res, usuarios);
+});
+
+const buscarUsuario = asyncHandler(async (req, res) => {
+    const usuario = await usuariosService.buscarPorId(Number(req.params.id));
+
+    if (!usuario) {
+        throw new AppError('Usuário não encontrado', 404);
+    }
+
+    successResponse(res, usuario);
 });
 
 const criarUsuario = asyncHandler(async (req, res) => {
     const usuario = await usuariosService.criarUsuario(req.body);
 
-    res.status(201).json(usuario);
+    successResponse(res, usuario);
 });
 
 const atualizarUsuario = asyncHandler(async (req, res) => {
@@ -22,10 +34,10 @@ const atualizarUsuario = asyncHandler(async (req, res) => {
     const usuarioAtualizado = await usuariosService.atualizarUsuario(id, req.body);
 
     if (!usuarioAtualizado) {
-        return res.status(404).json({ erro: 'Usuário não encontrado.' });
+        throw new AppError('Usuário não encontrado.', 404);
     }
 
-    res.json(usuarioAtualizado);
+    successResponse(res, usuarioAtualizado);
 });
 
 const deletarUsuario = asyncHandler(async (req, res) => {
@@ -34,14 +46,15 @@ const deletarUsuario = asyncHandler(async (req, res) => {
     const removido = await usuariosService.deletarUsuario(id);
 
     if (!removido) {
-        return res.status(404).json({ erro: 'Usuário não encontrado.' });
+        throw new AppError('Usuário não encontrado.', 404);
     }
 
-    res.json({ mensagem: 'Usuário removido.' });
+    successResponse(res, { mensagem: 'Usuário removido.' })
 });
 
 module.exports = {
     listarUsuarios,
+    buscarUsuario,
     criarUsuario,
     atualizarUsuario,
     deletarUsuario

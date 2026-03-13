@@ -7,6 +7,14 @@ async function listarUsuarios() {
     return rows;
 }
 
+async function buscarPorId(id) {
+    const { rows } = await pool.query(
+        'SELECT * FROM usuarios WHERE id=$1', [id]
+    );
+
+    return rows[0];
+}
+
 async function criarUsuario(dados) {
     const { nome, email, telefone } = dados;
 
@@ -38,6 +46,7 @@ async function deletarUsuario(id) {
 
 module.exports = {
     listarUsuarios,
+    buscarPorId,
     criarUsuario,
     atualizarUsuario,
     deletarUsuario
