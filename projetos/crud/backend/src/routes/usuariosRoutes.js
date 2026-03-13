@@ -5,11 +5,18 @@ const router = express.Router(); // Router sistema re rotas do express
 
 const usuariosController = require('../controllers/usuariosController');
 
+const validate = require('../middlewares/validate');
+const { criarUsuarioSchema } = require('../validations/usuarioValidation');
+
 router.get('/', usuariosController.listarUsuarios);
 
 router.get('/:id', usuariosController.buscarUsuario);
 
-router.post('/', usuariosController.criarUsuario);
+router.post(
+    '/',
+    validate(criarUsuarioSchema),
+    usuariosController.criarUsuario
+);
 
 router.put('/:id', usuariosController.atualizarUsuario);
 
