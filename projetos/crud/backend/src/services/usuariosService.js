@@ -1,10 +1,52 @@
 // Onde fica a lógica (é executado)
 const pool = require('../database/connection');
 
-async function listarUsuarios() {
-    const { rows } = await pool.query('SELECT * FROM usuarios');
+async function listarUsuarios(page = 1, limit = 10, filtros = {}) {
+    const offset = (page - 1) * limit
 
-    return rows;
+    let query = 'SELECT * FROM usuarios';
+    let conditions = [];
+    let values = [];
+
+    // filtro por nome
+    if (filtros.nome) {
+        values.push(`%${filtros.nome}%`);
+        conditions.push(`nome ILIKE $${values.length}`);
+    }
+
+    // filtro por email
+    if (filtros.email) {
+        values.push(`%${filtros.email}%`);
+        conditions.push(`email ILIKE $${values.length}`);
+    }
+
+    // WHERE dinâmico
+    if (conditions.length > 0) {
+        query += ` WHERE ${conditions.join(' AND ')}`;
+    }
+
+    // ordenação + paginação
+    query += ` ORDER BY id LIMIT $${values.length + 1} OFFSET $${values.length + 2}`;
+
+    values.push(limit, offset);
+    
+    const { rows } = await pool.query(query, values);
+
+    let countQuery = `SELECT COUNT(*) FROM usuarios`;
+
+    if (conditions.length > 0) {
+        countQuery += ` WHERE ${conditions.join(' AND ')}`; 
+    }
+
+    const totalResultado = await pool.query(countQuery,
+        values.slice(0, values.length - 2));
+
+    const total = parseInt(totalResultado.rows[0].count);
+
+    return {
+        data: rows,
+        total
+    };
 }
 
 async function buscarPorId(id) {

@@ -7,9 +7,27 @@ const { successResponse } = require('../utils/response');
 const AppError = require('../utils/AppError');
 
 const listarUsuarios = asyncHandler(async (req, res) => {
-    const usuarios = await usuariosService.listarUsuarios();
+    const page = parseInt(req.query.page) || 1;
+    const limit = parseInt(req.query.limit) || 10;
 
-    successResponse(res, usuarios);
+    const filtros = {
+        nome: req.query.nome,
+        email: req.query.email
+    };
+
+    const { data, total } = await
+        usuariosService.listarUsuarios(page, limit, filtros);
+
+    const totalPages = Math.ceil(total / limit);
+
+    successResponse(res, data, 200, {
+        pagination: {
+            page,
+            limit,
+            total,
+            totalPages
+        }
+    });
 });
 
 const buscarUsuario = asyncHandler(async (req, res) => {
