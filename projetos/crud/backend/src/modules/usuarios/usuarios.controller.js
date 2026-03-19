@@ -1,10 +1,10 @@
 // Onde recebe a requisição e decide o que fazer (não guarda dados)
 // Recebe requicição -> chama service -> retorna resposta
 // Não deve conter lógica pesada
-const usuariosService = require('../services/usuariosService');
-const asyncHandler = require('../middlewares/asyncHandler');
-const { successResponse } = require('../utils/response');
-const AppError = require('../utils/AppError');
+const usuariosService = require('./usuarios.service');
+const asyncHandler = require('../../middlewares/asyncHandler');
+const { successResponse } = require('../../utils/response');
+const AppError = require('../../utils/AppError');
 
 const listarUsuarios = asyncHandler(async (req, res) => {
     const page = parseInt(req.query.page) || 1;

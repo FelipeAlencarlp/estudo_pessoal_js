@@ -3,10 +3,10 @@
 const express = require('express');
 const router = express.Router(); // Router sistema re rotas do express
 
-const usuariosController = require('../controllers/usuariosController');
+const usuariosController = require('./usuarios.controller');
 
-const validate = require('../middlewares/validate');
-const { criarUsuarioSchema } = require('../validations/usuarioValidation');
+const validate = require('../../middlewares/validate');
+const { criarUsuarioSchema } = require('./usuarios.validation');
 
 router.get('/', usuariosController.listarUsuarios);
 

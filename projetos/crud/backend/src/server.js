@@ -3,7 +3,7 @@ require('dotenv').config();
 const errorMiddleware = require('./middlewares/errorMiddleware');
 
 const express = require('express');
-const usuariosRoutes = require('./routes/usuariosRoutes');
+const usuariosRoutes = require('./modules/usuarios/usuarios.routes');
 const cors = require('cors');
 
 const app = express();

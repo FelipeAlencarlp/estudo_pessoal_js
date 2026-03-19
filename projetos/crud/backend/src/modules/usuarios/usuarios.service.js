@@ -1,5 +1,5 @@
 // Onde fica a lógica (é executado)
-const pool = require('../database/connection');
+const pool = require('../../database/connection');
 
 async function listarUsuarios(page = 1, limit = 10, filtros = {}) {
     const offset = (page - 1) * limit
