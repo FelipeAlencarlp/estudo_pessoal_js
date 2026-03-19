@@ -6,6 +6,7 @@ const inputBusca = document.querySelector('#inputBusca');
 const listaUsuarios = document.querySelector('#listaUsuarios');
 
 let usuarios = carregarUsuarios();
+let totalUsuarios = 0;
 
 // variável de controle para o botão ADICIONAR
 // vai decidir se Cria novo ou Salva edição
@@ -23,8 +24,10 @@ inputBusca.addEventListener('input', (event) => {
 // função para carregar usuários
 async function carregarUsuarios() {
     const resposta = await fetch('http://localhost:3000/usuarios');
+    const json = await resposta.json();
 
-    usuarios = await resposta.json();
+    usuarios = json.data;
+    totalUsuarios = json.pagination.total;
 
     renderizarUsuarios();
 }
