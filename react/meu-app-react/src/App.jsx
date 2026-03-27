@@ -1,21 +1,15 @@
-import './App.css'
+import './App.css';
+import { useState } from 'react';
 
-function Usuario({ nome, idade }) {
-  return (
-    <div>
-      <h2>Nome: { nome }</h2>
-      <p>Idade: { idade }</p>
-    </div>
-  );
-}
+import Contador from './Components/Contador';
 
 function App() {
   return (
     <div>
-      <Usuario nome="Felipe" idade={25} />
-      <Usuario nome="João" idade={30} />
+      <h1>Contador</h1>
+      <Contador />
     </div>
   );
 }
 
-export default App
+export default App;
