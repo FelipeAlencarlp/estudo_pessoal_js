@@ -3,10 +3,13 @@ import { useState, useEffect } from 'react';
 
 import Relogio from './Components/Relogio';
 import FormularioSimples from './Components/FormularioSimples';
+import Toggle from './Components/Toggle';
 
 function App() {
+  const logado = true;
+
   return (
-    <FormularioSimples />
+    <Toggle />
   );
 }
 
