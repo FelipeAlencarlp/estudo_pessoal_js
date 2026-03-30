@@ -1,13 +1,11 @@
 import './App.css';
+import { useState, useEffect } from 'react';
 
-import Contador from './Components/Contador';
+import Relogio from './Components/Relogio';
 
 function App() {
   return (
-    <div>
-      <h1>Contador</h1>
-      <Contador />
-    </div>
+    <Relogio />
   );
 }
 
