@@ -70,4 +70,7 @@
 
             Isso é o que chamamos de:
                 -> UI reativa
+
+            SEMPRE QUE QUISER MUDAR ALGO:
+                map -> altera -> setState
 */

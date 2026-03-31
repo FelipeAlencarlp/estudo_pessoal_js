@@ -12,7 +12,11 @@ function App() {
   }, [tarefas]);
 
   useEffect(() => {
-    JSON.parse(localStorage.getItem('tarefas'));
+    const dados = JSON.parse(localStorage.getItem('tarefas'));
+
+    if (dados) {
+      setTarefas(dados);
+    }
   }, []);
 
   const adicionarTarefa = (texto) => {
@@ -23,6 +27,16 @@ function App() {
     };
 
     setTarefas([...tarefas, novaTarefa]);
+  }
+
+  const editarTarefa = (id, novoTexto) => {
+    const novas = tarefas.map((t) =>
+      t.id === id
+        ? { ...t, texto: novoTexto }
+        : t
+    );
+
+    setTarefas(novas);
   }
 
   const marcarConcluida = (id) => {
@@ -50,6 +64,7 @@ function App() {
         tarefas={tarefas}
         marcarConcluida={marcarConcluida}
         excluirTarefa={excluirTarefa}
+        editarTarefa={editarTarefa}
       />
     </>
   );

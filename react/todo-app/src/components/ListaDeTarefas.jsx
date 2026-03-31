@@ -1,6 +1,6 @@
 import Item from "./Item";
 
-function ListaDeTarefas({ tarefas, marcarConcluida, excluirTarefa }) {
+function ListaDeTarefas({ tarefas, marcarConcluida, excluirTarefa, editarTarefa }) {
     return (
         <ul>
             {tarefas.map((tarefa, index) => (
@@ -10,6 +10,7 @@ function ListaDeTarefas({ tarefas, marcarConcluida, excluirTarefa }) {
                     index={index}
                     marcarConcluida={marcarConcluida}
                     excluirTarefa={excluirTarefa}
+                    editarTarefa={editarTarefa}
                 />
             ))}
         </ul>
