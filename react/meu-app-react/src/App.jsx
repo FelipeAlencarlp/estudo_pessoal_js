@@ -9,11 +9,17 @@ import Toggle from './Components/Toggle';
 import ListaUsuarios from './Components/ListaUsuarios';
 import Cadastro from './Components/Cadastro';
 
-function App() {
-  const logado = true;
+// Context
+import { ThemeProvider } from './Components/contexts/ThemeContext';
+import Botao from './Components/Botao';
+import Texto from './Components/Texto';
 
+function App() {
   return (
-    <Cadastro />
+    <ThemeProvider>
+      <Botao />
+      <Texto />
+    </ThemeProvider>
   );
 }
 
