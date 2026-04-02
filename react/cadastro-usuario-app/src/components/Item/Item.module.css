@@ -1,0 +1,26 @@
+.botaoEditar {
+    padding: 10px;
+    margin-right: 5px;
+    border: none;
+    background-color: #4e4caf;
+    color: white;
+    border-radius: 6px;
+    cursor: pointer;
+}
+
+.botaoEditar:hover {
+    background-color: #46449c
+}
+
+.botaoExcluir {
+    padding: 10px;
+    border: none;
+    background-color: #d1111b;
+    color: white;
+    border-radius: 6px;
+    cursor: pointer;
+}
+
+.botaoExcluir:hover {
+    background-color: #b60e16
+}

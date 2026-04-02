@@ -1,17 +1,15 @@
-import Item from "./Item";
+import Item from "../Item/Item";
+
+import styles from './ListaUsuarios.module.css';
 
 function ListaUsuarios({ usuarios, excluirUsuario, setUsuarioEditando }) {
     return (
-        <div style={{
-            display: 'flex',
-            flexDirection: 'column',
-            marginTop: 20,
-                alignItems: 'center'
-            }}>
+        <div className={styles.container}>
                 <h3>Usuários Cadastrados</h3>
+
                 {usuarios.length > 0 ? (
                     <>
-                        <table style={{ width: 800, alignItems: 'center' }}>
+                        <table className={styles.tabela}>
                             <thead>
                                 <tr>
                                     <th>Nome</th>

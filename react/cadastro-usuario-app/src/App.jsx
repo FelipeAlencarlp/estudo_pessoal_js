@@ -2,28 +2,25 @@ import './App.css'
 
 import { useState } from 'react';
 
-import Formulario from './Components/Formulario';
-import ListaUsuarios from './Components/ListaUsuarios';
+import Formulario from './components/Formulario/Formulario';
+import ListaUsuarios from './components/ListaUsuarios/ListaUsuarios';
 
 function App() {
   const [usuarios, setUsuarios] = useState([]);
   const [usuarioEditando, setUsuarioEditando] = useState(null);
 
   const cadastrarUsuario = (nome, email) => {
-    const emailExiste = usuarios.find((u) => u.email === email);
+    const novo = {
+      id: Date.now(),
+      nome,
+      email
+    };
 
-    if (emailExiste) {
-      return alert('Esse e-mail já está em uso!');
+    setUsuarios([...usuarios, novo]);
+  };
 
-    } else {
-      const novo = {
-        id: Date.now(),
-        nome,
-        email
-      };
-  
-      setUsuarios([...usuarios, novo]);
-    }
+  const emailExiste = (email) => {
+    return usuarios.some((usuario) => usuario.email === email);
   };
 
   const editarUsuario = (id, novoNome, novoEmail) => {
@@ -38,6 +35,10 @@ function App() {
   };
 
   const excluirUsuario = (id) => {
+    const confirmar = confirm('Tem certeza que deseja excluir esse usuário?');
+
+    if (!confirmar) return;
+
     const novos = usuarios.filter((usuario) => usuario.id !== id);
     setUsuarios(novos);
   };
@@ -48,6 +49,7 @@ function App() {
         cadastrarUsuario={cadastrarUsuario}
         editarUsuario={editarUsuario}
         usuarioEditando={usuarioEditando}
+        emailExiste={emailExiste}
       />
 
       <ListaUsuarios

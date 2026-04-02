@@ -1,0 +1,20 @@
+.container {
+    margin-top: 20px;
+    text-align: center;
+}
+
+.tabela {
+    width: 600px;
+    margin: 0 auto;
+    border-collapse: collapse;
+}
+
+.tabela th,
+.tabela td {
+    border: 1px solid #ddd;
+    padding: 8px;
+}
+
+.tabela th {
+    background-color: #f2f2f2
+}
