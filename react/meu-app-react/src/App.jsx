@@ -13,8 +13,11 @@ import Cadastro from './Components/Cadastro';
 import { ThemeProvider } from './Components/contexts/ThemeContext';
 import Botao from './Components/Botao';
 import Texto from './Components/Texto';
+import { useLocalStorage } from './Components/hook/useLocalStorage';
 
 function App() {
+  const [usuarios, setUsuarios] = useLocalStorage('usuarios', []);
+
   return (
     <ThemeProvider>
       <Botao />
