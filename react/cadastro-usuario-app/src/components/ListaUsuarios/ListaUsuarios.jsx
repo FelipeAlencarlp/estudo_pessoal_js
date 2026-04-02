@@ -2,7 +2,9 @@ import Item from "../Item/Item";
 
 import styles from './ListaUsuarios.module.css';
 
-function ListaUsuarios({ usuarios, excluirUsuario, setUsuarioEditando }) {
+function ListaUsuarios({
+    usuarios, usuarioEditando, setUsuarioEditando, pedirConfirmacao
+}) {
     return (
         <div className={styles.container}>
                 <h3>Usuários Cadastrados</h3>
@@ -22,8 +24,9 @@ function ListaUsuarios({ usuarios, excluirUsuario, setUsuarioEditando }) {
                                     <Item
                                         key={usuario.id}
                                         usuario={usuario}
-                                        excluirUsuario={excluirUsuario}
+                                        usuarioEditando={usuarioEditando}
                                         setUsuarioEditando={setUsuarioEditando}
+                                        pedirConfirmacao={pedirConfirmacao}
                                     />
                                 ))}
                             </tbody>

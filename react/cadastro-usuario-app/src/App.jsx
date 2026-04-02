@@ -4,10 +4,13 @@ import { useState } from 'react';
 
 import Formulario from './components/Formulario/Formulario';
 import ListaUsuarios from './components/ListaUsuarios/ListaUsuarios';
+import Modal from './components/Modal/Modal';
 
 function App() {
   const [usuarios, setUsuarios] = useState([]);
   const [usuarioEditando, setUsuarioEditando] = useState(null);
+  const [usuarioParaExcluir, setUsuarioParaExcluir] = useState(null);
+  const [mostrarModal, setMostrarModal] = useState(false);
 
   const cadastrarUsuario = (nome, email) => {
     const novo = {
@@ -34,13 +37,19 @@ function App() {
     setUsuarioEditando(null);
   };
 
-  const excluirUsuario = (id) => {
-    const confirmar = confirm('Tem certeza que deseja excluir esse usuário?');
+  const pedirConfirmacao = (usuario) => {
+    setUsuarioParaExcluir(usuario);
+    setMostrarModal(true);
+  };
 
-    if (!confirmar) return;
+  const confirmarExclusao = () => {
+    const novos = usuarios.filter(
+      (usuario) => usuario.id !== usuarioParaExcluir.id
+    );
 
-    const novos = usuarios.filter((usuario) => usuario.id !== id);
     setUsuarios(novos);
+    setMostrarModal(false);
+    setUsuarioParaExcluir(null);
   };
 
   return (
@@ -54,8 +63,16 @@ function App() {
 
       <ListaUsuarios
         usuarios={usuarios}
-        excluirUsuario={excluirUsuario}
+        usuarioEditando={usuarioEditando}
         setUsuarioEditando={setUsuarioEditando}
+        pedirConfirmacao={pedirConfirmacao}
+      />
+
+      <Modal
+        aberto={mostrarModal}
+        usuarioParaExcluir={usuarioParaExcluir}
+        onConfirmar={confirmarExclusao}
+        onCancelar={() => setMostrarModal(false)}
       />
     </>
   );

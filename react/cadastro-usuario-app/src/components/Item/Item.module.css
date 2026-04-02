@@ -24,3 +24,8 @@
 .botaoExcluir:hover {
     background-color: #b60e16
 }
+
+.botaoExcluir:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+}

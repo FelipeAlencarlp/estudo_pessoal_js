@@ -1,6 +1,8 @@
 import styles from './Item.module.css';
 
-function Item({ usuario, excluirUsuario, setUsuarioEditando }) {
+function Item({
+    usuario, usuarioEditando, setUsuarioEditando, pedirConfirmacao
+}) {
     return (
         <tr>
             <td>{usuario.nome}</td>
@@ -17,7 +19,8 @@ function Item({ usuario, excluirUsuario, setUsuarioEditando }) {
                 <button
                     title="Excluir usuário"
                     className={styles.botaoExcluir}
-                    onClick={() => excluirUsuario(usuario.id)}
+                    onClick={() => pedirConfirmacao(usuario)}
+                    disabled={usuarioEditando?.id === usuario.id}
                 >
                     Excluir
                 </button>
