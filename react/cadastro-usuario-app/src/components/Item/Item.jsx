@@ -1,8 +1,13 @@
+import { useUsuarios } from '../../hooks/useUsuarios';
 import styles from './Item.module.css';
 
-function Item({
-    usuario, usuarioEditando, setUsuarioEditando, pedirConfirmacao
-}) {
+function Item({ usuario }) {
+    const {
+        usuarioEditando,
+        setUsuarioEditando,
+        pedirConfirmacao
+    } = useUsuarios();
+    
     return (
         <tr>
             <td>{usuario.nome}</td>

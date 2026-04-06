@@ -1,7 +1,15 @@
+import { useUsuarios } from '../../hooks/useUsuarios';
 import styles from './Modal.module.css';
 
-function Modal({ aberto, usuarioParaExcluir, onConfirmar, onCancelar }) {
-    if (!aberto) return null;
+function Modal() {
+    const {
+        mostrarModal,
+        usuarioParaExcluir,
+        confirmarExclusao,
+        setMostrarModal
+    } = useUsuarios();
+
+    if (!mostrarModal) return null;
 
     return (
         <div className={styles.overlayStyle}>
@@ -12,8 +20,8 @@ function Modal({ aberto, usuarioParaExcluir, onConfirmar, onCancelar }) {
                 </p>
 
                 <div className={styles.divBotoes}>
-                    <button onClick={onConfirmar}>Sim</button>
-                    <button onClick={onCancelar}>Cancelar</button>
+                    <button onClick={confirmarExclusao}>Sim</button>
+                    <button onClick={() => setMostrarModal(false)}>Cancelar</button>
                 </div>
             </div>
         </div>

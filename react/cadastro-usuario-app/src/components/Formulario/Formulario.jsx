@@ -1,10 +1,15 @@
 import { useState, useEffect } from "react";
+import { useUsuarios } from "../../hooks/useUsuarios";
 
 import styles from "./Formulario.module.css";
 
-function Formulario({
-    cadastrarUsuario, editarUsuario, usuarioEditando, emailExiste
-}) {
+function Formulario() {
+    const {
+        cadastrarUsuario,
+        editarUsuario,
+        usuarioEditando,
+        emailExiste
+    } = useUsuarios();
     const [nome, setNome] = useState('');
     const [email, setEmail] = useState('');
     const [erroNome, setErroNome] = useState('');

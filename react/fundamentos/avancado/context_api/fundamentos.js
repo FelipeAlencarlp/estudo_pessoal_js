@@ -61,21 +61,21 @@
             }
 
         RESUMO
-        Parte           Função
-        -------------------------------
-        createContext   cria o contexto
-        -------------------------------
-        Provider        fornece dados
-        -------------------------------
-        useContext      consome
+            Parte           Função
+            -------------------------------
+            createContext   cria o contexto
+            -------------------------------
+            Provider        fornece dados
+            -------------------------------
+            useContext      consome
 
         REGRA DE OURO
-        -> 'useContext' só funciona dentro do Provider
-        -> Serve para:
-            - usuário logado
-            - tema
-            - idioma
-            - configs globais
+            -> 'useContext' só funciona dentro do Provider
+            -> Serve para:
+                - usuário logado
+                - tema
+                - idioma
+                - configs globais
 
         NÂO USAR PARA TUDO
             -> não substitui 'useState' local

@@ -1,10 +1,17 @@
+import { useUsuarios } from "../../hooks/useUsuarios";
+
 import Item from "../Item/Item";
 
 import styles from './ListaUsuarios.module.css';
 
-function ListaUsuarios({
-    usuarios, usuarioEditando, setUsuarioEditando, pedirConfirmacao
-}) {
+function ListaUsuarios() {
+    const {
+        usuarios,
+        usuarioEditando,
+        setUsuarioEditando,
+        pedirConfirmacao
+    } = useUsuarios();
+
     return (
         <div className={styles.container}>
                 <h3>Usuários Cadastrados</h3>
@@ -24,9 +31,6 @@ function ListaUsuarios({
                                     <Item
                                         key={usuario.id}
                                         usuario={usuario}
-                                        usuarioEditando={usuarioEditando}
-                                        setUsuarioEditando={setUsuarioEditando}
-                                        pedirConfirmacao={pedirConfirmacao}
                                     />
                                 ))}
                             </tbody>
