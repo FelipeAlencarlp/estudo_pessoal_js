@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
-import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
-import { getUsuarios, criarUsuario, atualizarUsuario } from "../../services/api";
+import { useUsuariosQuery } from "../../hooks/useUsuariosQuery";
+import { useUsuariosMutation } from "../../hooks/useUsuariosMutation";
 import { useUsuarios } from "../../hooks/useUsuarios";
 
 import styles from "./Formulario.module.css";
@@ -8,26 +8,8 @@ import styles from "./Formulario.module.css";
 function Formulario() {
     const { usuarioEditando, setUsuarioEditando } = useUsuarios();
 
-    const queryClient = useQueryClient();
-
-    const { data: usuarios = [] } = useQuery({
-        queryKey: ['usuarios'],
-        queryFn: getUsuarios
-    });
-
-    const mutation = useMutation({
-        mutationFn: criarUsuario,
-        onSuccess: () => {
-            queryClient.invalidateQueries(['usuarios']);
-        }
-    });
-
-    const updateMutation = useMutation({
-        mutationFn: atualizarUsuario,
-        onSuccess: () => {
-            queryClient.invalidateQueries(['usuarios']);
-        }
-    });
+    const { data: usuarios } = useUsuariosQuery();
+    const { create, update } = useUsuariosMutation();
 
     const [nome, setNome] = useState('');
     const [email, setEmail] = useState('');
@@ -81,20 +63,17 @@ function Formulario() {
 
         if (!valido) return;
 
+        const payload = {
+            id: usuarioEditando?.id ?? Date.now(),
+            nome,
+            email,
+            telefone
+        };
+
         if (usuarioEditando) {
-            updateMutation.mutate({
-                id: usuarioEditando.id,
-                nome,
-                email,
-                telefone
-            });
+            update.mutate(payload);
         } else {
-            mutation.mutate({
-                id: Date.now(),
-                nome,
-                email,
-                telefone
-            });
+            create.mutate(payload);
         }
 
         setNome('');

@@ -22,3 +22,9 @@
     gap: 10px;
     margin-top: 5px
 }
+
+.alerta {
+    text-align: right;
+    font-size: 10px;
+    color: red;
+}

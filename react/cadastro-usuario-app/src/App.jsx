@@ -1,13 +1,14 @@
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
-const queryClient = new QueryClient();
 
-import CadastroUsuarios from './pages/CadastroUsuarios/CadastroUsuarios';
-import './App.css';
+import UsuariosPage from "./features/usuarios/UsuariosPage";
+import './styles/App.css';
+
+const queryClient = new QueryClient();
 
 function App() {
   return (
     <QueryClientProvider client={queryClient}>
-      <CadastroUsuarios/>
+      <UsuariosPage/>
     </QueryClientProvider>
   );
 }

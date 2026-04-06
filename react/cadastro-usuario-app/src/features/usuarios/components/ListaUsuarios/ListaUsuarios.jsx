@@ -1,5 +1,5 @@
 import { useQuery } from "@tanstack/react-query";
-import { getUsuarios } from "../../services/api";
+import { getUsuarios } from "../../services/usuariosApi";
 
 import Item from "../Item/Item";
 import styles from './ListaUsuarios.module.css';

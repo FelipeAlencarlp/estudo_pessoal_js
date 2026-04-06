@@ -1,26 +1,16 @@
-import { useMutation, useQueryClient } from '@tanstack/react-query';
-import { deletarUsuario } from '../../services/api';
+import { useUsuariosMutation } from "../../hooks/useUsuariosMutation";
 import { useUsuarios } from '../../hooks/useUsuarios';
 
 import styles from './Modal.module.css';
 
 function Modal() {
     const { usuarioParaExcluir, fecharModal } = useUsuarios();
-
-    const queryClient = useQueryClient();
-
-    const deleteMutation = useMutation({
-        mutationFn: deletarUsuario,
-        onSuccess: () => {
-            queryClient.invalidateQueries(['usuarios']);
-            fecharModal();
-        }
-    });
+    const { remove } = useUsuariosMutation();
 
     if (!usuarioParaExcluir) return null;
 
     function handleConfirmar() {
-        deleteMutation.mutate(usuarioParaExcluir.id);
+        remove.mutate(usuarioParaExcluir.id, fecharModal());
     }
 
     return (
@@ -35,6 +25,10 @@ function Modal() {
                     <button onClick={handleConfirmar}>Sim</button>
                     <button onClick={fecharModal}>Cancelar</button>
                 </div>
+                <p className={styles.alerta}>
+                    Atenção: Ao clicar em
+                    <strong> Sim</strong>, não tem como reverter
+                </p>
             </div>
         </div>
     );
