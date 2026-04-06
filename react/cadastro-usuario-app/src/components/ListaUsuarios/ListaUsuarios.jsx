@@ -1,4 +1,3 @@
-import { useUsuarios } from "../../hooks/useUsuarios";
 import { useQuery } from "@tanstack/react-query";
 import { getUsuarios } from "../../services/api";
 
@@ -6,8 +5,6 @@ import Item from "../Item/Item";
 import styles from './ListaUsuarios.module.css';
 
 function ListaUsuarios() {
-    const { usuarios } = useUsuarios();
-
     const { data, isLoading, error } = useQuery({
         queryKey: ['usuarios'],
         queryFn: getUsuarios

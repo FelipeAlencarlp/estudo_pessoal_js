@@ -1,15 +1,33 @@
 import { useState, useEffect } from "react";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
+import { getUsuarios, criarUsuario, atualizarUsuario } from "../../services/api";
 import { useUsuarios } from "../../hooks/useUsuarios";
 
 import styles from "./Formulario.module.css";
 
 function Formulario() {
-    const {
-        cadastrarUsuario,
-        editarUsuario,
-        usuarioEditando,
-        emailExiste
-    } = useUsuarios();
+    const { usuarioEditando, setUsuarioEditando } = useUsuarios();
+
+    const queryClient = useQueryClient();
+
+    const { data: usuarios = [] } = useQuery({
+        queryKey: ['usuarios'],
+        queryFn: getUsuarios
+    });
+
+    const mutation = useMutation({
+        mutationFn: criarUsuario,
+        onSuccess: () => {
+            queryClient.invalidateQueries(['usuarios']);
+        }
+    });
+
+    const updateMutation = useMutation({
+        mutationFn: atualizarUsuario,
+        onSuccess: () => {
+            queryClient.invalidateQueries(['usuarios']);
+        }
+    });
 
     const [nome, setNome] = useState('');
     const [email, setEmail] = useState('');
@@ -19,21 +37,24 @@ function Formulario() {
     
     useEffect(() => {
         if (usuarioEditando) {
-            setNome(usuarioEditando.nome);
-            setEmail(usuarioEditando.email);
-            setTelefone(usuarioEditando?.telefone);
+            setNome(usuarioEditando.nome || '');
+            setEmail(usuarioEditando.email || '');
+            setTelefone(usuarioEditando.telefone || '');
         }
     }, [usuarioEditando]);
 
     function handleSubmit(e) {
         e.preventDefault();
 
-        if (
-            emailExiste(email) &&
-            (!usuarioEditando || email !== usuarioEditando.email)
-        ) {
+        const emailDuplicado = usuarios.some(
+            (u) =>
+                u.email === email &&
+                (!usuarioEditando || u.id !== usuarioEditando.id)
+        );
+
+        if (emailDuplicado) {
             setErroEmail('Este e-mail já está em uso!');
-            return
+            return;
         }
 
         let valido = true;
@@ -61,14 +82,25 @@ function Formulario() {
         if (!valido) return;
 
         if (usuarioEditando) {
-            editarUsuario(usuarioEditando.id, nome, email, telefone ?? '');
+            updateMutation.mutate({
+                id: usuarioEditando.id,
+                nome,
+                email,
+                telefone
+            });
         } else {
-            cadastrarUsuario(nome, email, telefone);
+            mutation.mutate({
+                id: Date.now(),
+                nome,
+                email,
+                telefone
+            });
         }
 
         setNome('');
         setEmail('');
         setTelefone('');
+        setUsuarioEditando(null);
     }
 
     return (
@@ -111,34 +143,20 @@ function Formulario() {
 
                 <input
                     type="text"
-                    title="(Digite seu telefone)"
+                    title="Digite seu telefone"
                     className={styles.input}
                     placeholder="(99) 99999-9999"
                     value={telefone}
                     onChange={(e) => setTelefone(e.target.value)}
                 />
                 
-                {usuarioEditando ? (
-                    <>
-                        <button
-                            type="submit"
-                            className={styles.botao}
-                            title="Salvar edição"
-                        >
-                            Salvar
-                        </button>
-                    </>
-                ) : (
-                    <>
-                        <button
-                            type="submit"
-                            className={styles.botao}
-                            title="Cadastrar usuário"
-                        >
-                            Cadastrar
-                        </button>
-                    </>
-                )}
+                <button
+                    type="submit"
+                    className={styles.botao}
+                    title="Salvar edição"
+                >
+                    {usuarioEditando ? 'Salvar' : 'Cadastrar'}
+                </button>
             </form>
         </div>
     );

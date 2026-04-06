@@ -1,15 +1,27 @@
+import { useMutation, useQueryClient } from '@tanstack/react-query';
+import { deletarUsuario } from '../../services/api';
 import { useUsuarios } from '../../hooks/useUsuarios';
+
 import styles from './Modal.module.css';
 
 function Modal() {
-    const {
-        mostrarModal,
-        usuarioParaExcluir,
-        confirmarExclusao,
-        setMostrarModal
-    } = useUsuarios();
+    const { usuarioParaExcluir, fecharModal } = useUsuarios();
 
-    if (!mostrarModal) return null;
+    const queryClient = useQueryClient();
+
+    const deleteMutation = useMutation({
+        mutationFn: deletarUsuario,
+        onSuccess: () => {
+            queryClient.invalidateQueries(['usuarios']);
+            fecharModal();
+        }
+    });
+
+    if (!usuarioParaExcluir) return null;
+
+    function handleConfirmar() {
+        deleteMutation.mutate(usuarioParaExcluir.id);
+    }
 
     return (
         <div className={styles.overlayStyle}>
@@ -20,8 +32,8 @@ function Modal() {
                 </p>
 
                 <div className={styles.divBotoes}>
-                    <button onClick={confirmarExclusao}>Sim</button>
-                    <button onClick={() => setMostrarModal(false)}>Cancelar</button>
+                    <button onClick={handleConfirmar}>Sim</button>
+                    <button onClick={fecharModal}>Cancelar</button>
                 </div>
             </div>
         </div>
