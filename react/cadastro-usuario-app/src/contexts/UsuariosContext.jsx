@@ -9,11 +9,12 @@ export function UsuariosProvider({ children }) {
     const [usuarioParaExcluir, setUsuarioParaExcluir] = useState(null);
     const [mostrarModal, setMostrarModal] = useState(false);
 
-    const cadastrarUsuario = (nome, email) => {
+    const cadastrarUsuario = (nome, email, telefone) => {
         const novo = {
             id: Date.now(),
             nome,
-            email
+            email,
+            telefone
         };
 
         setUsuarios([...usuarios, novo]);
@@ -23,11 +24,15 @@ export function UsuariosProvider({ children }) {
         return usuarios.some((usuario) => usuario.email === email);
     };
 
-    const editarUsuario = (id, novoNome, novoEmail) => {
+    const editarUsuario = (id, novoNome, novoEmail, novoTelefone) => {
         const novos = usuarios.map((usuario) =>
             usuario.id === id
-            ? { ...usuario, nome: novoNome, email: novoEmail }
-            : usuario
+            ? { 
+                ...usuario,
+                nome: novoNome,
+                email: novoEmail,
+                telefone: novoTelefone 
+            } : usuario
         );
 
         setUsuarios(novos);

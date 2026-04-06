@@ -12,6 +12,7 @@ function Item({ usuario }) {
         <tr>
             <td>{usuario.nome}</td>
             <td>{usuario.email}</td>
+            <td>{usuario.telefone}</td>
             <td>
                 <button
                     title="Editar usuário"

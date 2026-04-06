@@ -10,8 +10,10 @@ function Formulario() {
         usuarioEditando,
         emailExiste
     } = useUsuarios();
+
     const [nome, setNome] = useState('');
     const [email, setEmail] = useState('');
+    const [telefone, setTelefone] = useState('');
     const [erroNome, setErroNome] = useState('');
     const [erroEmail, setErroEmail] = useState('');
     
@@ -19,6 +21,7 @@ function Formulario() {
         if (usuarioEditando) {
             setNome(usuarioEditando.nome);
             setEmail(usuarioEditando.email);
+            setTelefone(usuarioEditando?.telefone);
         }
     }, [usuarioEditando]);
 
@@ -58,13 +61,14 @@ function Formulario() {
         if (!valido) return;
 
         if (usuarioEditando) {
-            editarUsuario(usuarioEditando.id, nome, email);
+            editarUsuario(usuarioEditando.id, nome, email, telefone ?? '');
         } else {
-            cadastrarUsuario(nome, email);
+            cadastrarUsuario(nome, email, telefone);
         }
 
         setNome('');
         setEmail('');
+        setTelefone('');
     }
 
     return (
@@ -104,6 +108,15 @@ function Formulario() {
                 />
 
                 {erroEmail && <p className={styles.erro}>{erroEmail}</p>}
+
+                <input
+                    type="text"
+                    title="(Digite seu telefone)"
+                    className={styles.input}
+                    placeholder="(99) 99999-9999"
+                    value={telefone}
+                    onChange={(e) => setTelefone(e.target.value)}
+                />
                 
                 {usuarioEditando ? (
                     <>
