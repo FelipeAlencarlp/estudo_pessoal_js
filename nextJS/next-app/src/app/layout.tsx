@@ -34,7 +34,8 @@ export default function RootLayout({
 
           <nav className="flex gap-4 mt-2">
             <Link href="/">Home</Link>
-            <Link href="/dashboard">Dashboard</Link>
+            <Link href="/dashboard">Dashboard SSR</Link>
+            <Link href="/dashboard-client">Dashboard CSR</Link>
             <Link href="/about">Sobre</Link>
           </nav>
         </header>

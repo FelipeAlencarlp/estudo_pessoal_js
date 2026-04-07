@@ -7,7 +7,8 @@ export default function Home() {
 
       <nav style={{ display: 'flex', gap: '10px' }}>
         <Link href="/about">Sobre</Link>
-        <Link href="/dashboard">Dashboard</Link>
+        <Link href="/dashboard">Dashboard SSR</Link>
+        <Link href="/dashboard-client">Dashboard CSR</Link>
       </nav>
     </div>
   );
