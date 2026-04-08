@@ -3,7 +3,7 @@
 import { useEffect, useState } from "react";
 import { User } from "@/types/User";
 import { getUsers, deleteUser } from "@/services/userService";
-import DeleteUserModal from "@/components/DeleteUserModal";
+import DeleteModal from "@/components/DeleteModal";
 
 export default function UserList({ refetchRef }: any) {
     const [users, setUsers] = useState<User[]>([]);
@@ -90,7 +90,7 @@ export default function UserList({ refetchRef }: any) {
                 </tbody>
             </table>
 
-            <DeleteUserModal
+            <DeleteModal
                 isOpen={isModalOpen}
                 onClose={() => setIsModalOpen(false)}
                 onConfirm={handleDelete}
