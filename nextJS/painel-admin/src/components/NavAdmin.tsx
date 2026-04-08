@@ -20,6 +20,7 @@ export default function NavAdmin() {
                     <Link
                         key={item.href}
                         href={item.href}
+                        title={item.name}
                         className={`
                             block p-2 rounded transition
                             ${isActive

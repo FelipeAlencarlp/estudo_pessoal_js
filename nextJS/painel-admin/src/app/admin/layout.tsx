@@ -1,5 +1,10 @@
+import type { Metadata } from "next";
 import LogoutButton from "@/components/LogoutButton";
 import NavAdmin from "@/components/NavAdmin";
+
+export const metadata: Metadata = {
+  title: "Painel Admin",
+};
 
 export default function AdminLayout({
     children,

@@ -12,11 +12,12 @@ export default function LogoutButton() {
 
     return (
         <button
-            onClick={handleLogout}
+            title="Sair"
             className="
                 mt-5 bg-red-500 p-2 rounded w-full
                 cursor-pointer hover:bg-red-600
             "
+            onClick={handleLogout}
         >
             Sair
         </button>
