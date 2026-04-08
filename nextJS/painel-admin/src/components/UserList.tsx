@@ -3,14 +3,26 @@
 import { useEffect, useState } from "react";
 import { User } from "@/types/User";
 import { getUsers, deleteUser } from "@/services/userService";
+import DeleteUserModal from "@/components/DeleteUserModal";
 
 export default function UserList({ refetchRef }: any) {
     const [users, setUsers] = useState<User[]>([]);
-    const [loadingId, setLoadingId] = useState<number | null>(null)
+    const [selectedUser, setSelectedUser] = useState<User | null>(null);
+    const [isModalOpen, setIsModalOpen] = useState(false);
     
     async function fetchUsers() {
         const data = await getUsers();
         setUsers(data); 
+    }
+
+    async function handleDelete() {
+        if (!selectedUser) return;
+
+        await deleteUser(selectedUser.id);
+        await fetchUsers();
+
+        setIsModalOpen(false);
+        setSelectedUser(null);
     }
 
     useEffect(() => {
@@ -23,7 +35,7 @@ export default function UserList({ refetchRef }: any) {
 
     return (
         <div className="flex flex-col">
-            <p className="text-gray-500 text-xl mb-4 mt-10">Lista de Usuários</p>
+            <p className="text-gray-600 text-xl mb-4 mt-10">Lista de Usuários</p>
 
             <table className="
                 text-gray-900 mt-0 w-full
@@ -41,7 +53,7 @@ export default function UserList({ refetchRef }: any) {
                     {users.map((user) => (
                         <tr
                             key={user.id}
-                            className="border-b"
+                            className="border-b text-gray-500"
                         >
                             <td className="p-2">{user.name}</td>
                             <td className="p-2">{user.email}</td>
@@ -52,7 +64,7 @@ export default function UserList({ refetchRef }: any) {
                                     className="
                                         bg-green-500 text-white p-2
                                         rounded cursor-pointer mr-2
-                                        hover:bg-green-600
+                                        hover:bg-green-400
                                     "
                                 >
                                     Editar
@@ -63,30 +75,27 @@ export default function UserList({ refetchRef }: any) {
                                     className="
                                         bg-red-500 text-white p-2
                                         rounded cursor-pointer
-                                        hover:bg-red-600
-                                        disabled:opacity-50
+                                        hover:bg-red-400
                                     "
-                                    disabled={loadingId === user.id}
-                                    onClick={async () =>  {
-                                        try {
-                                            setLoadingId(user.id);
-
-                                            await deleteUser(user.id);
-                                            await fetchUsers();
-                                        } catch (error) {
-                                            alert('Erro ao deletar');
-                                        } finally {
-                                            setLoadingId(null);
-                                        }
+                                    onClick={() =>  {
+                                        setSelectedUser(user);
+                                        setIsModalOpen(true);
                                     }}
                                 >
-                                    {loadingId === user.id ? '...' : 'Excluir'}
+                                    Excluir
                                 </button>
                             </td>
                         </tr>
                     ))}
                 </tbody>
             </table>
+
+            <DeleteUserModal
+                isOpen={isModalOpen}
+                onClose={() => setIsModalOpen(false)}
+                onConfirm={handleDelete}
+                name={selectedUser?.name}
+            />
         </div>
     );
 }

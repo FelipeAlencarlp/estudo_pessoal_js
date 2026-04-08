@@ -47,7 +47,7 @@ export default function CreateUser({ onUserCreated }: any) {
 
     return (
         <div className="flex flex-col items-center">
-            <p className="text-gray-500 text-xl mb-4">Adicionar Novo Usuário</p>
+            <p className="text-gray-600 text-xl mb-4">Adicionar Novo Usuário</p>
 
             <div className="flex mb-4">
                 <div className="flex-col">
@@ -103,7 +103,7 @@ export default function CreateUser({ onUserCreated }: any) {
                         title="Adicionar usuário"
                         className="
                             bg-blue-500 text-white p-2
-                            rounded cursor-pointer hover:bg-blue-600
+                            rounded cursor-pointer hover:bg-blue-400
                         "
                         onClick={handleCreate}
                     >
