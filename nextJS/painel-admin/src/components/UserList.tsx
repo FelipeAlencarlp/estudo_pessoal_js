@@ -2,17 +2,30 @@
 
 import { useEffect, useState } from "react";
 import { User } from "@/types/User";
-import { getUsers, deleteUser } from "@/services/userService";
-import DeleteModal from "@/components/DeleteModal";
+import { getUsers, deleteUser, updateUser } from "@/services/userService";
+import DeleteModal from "./DeleteModal";
+import EditUserModal from "./EditUserModal";
 
 export default function UserList({ refetchRef }: any) {
     const [users, setUsers] = useState<User[]>([]);
     const [selectedUser, setSelectedUser] = useState<User | null>(null);
+
     const [isModalOpen, setIsModalOpen] = useState(false);
+    const [isEditOpen, setIsEditOpen] = useState(false);
     
     async function fetchUsers() {
         const data = await getUsers();
         setUsers(data); 
+    }
+
+    async function handleUpdate(name: string, email: string, phone: string) {
+        if (!selectedUser) return null;
+
+        await updateUser(selectedUser.id, name, email, phone);
+        await fetchUsers();
+
+        setIsEditOpen(false);
+        setSelectedUser(null);
     }
 
     async function handleDelete() {
@@ -66,6 +79,10 @@ export default function UserList({ refetchRef }: any) {
                                         rounded cursor-pointer mr-2
                                         hover:bg-green-400
                                     "
+                                    onClick={() => {
+                                        setSelectedUser(user);
+                                        setIsEditOpen(true);
+                                    }}
                                 >
                                     Editar
                                 </button>
@@ -89,6 +106,13 @@ export default function UserList({ refetchRef }: any) {
                     ))}
                 </tbody>
             </table>
+
+            <EditUserModal
+                user={selectedUser}
+                isOpen={isEditOpen}
+                onClose={() => setIsEditOpen(false)}
+                onConfirm={handleUpdate}
+            />
 
             <DeleteModal
                 isOpen={isModalOpen}

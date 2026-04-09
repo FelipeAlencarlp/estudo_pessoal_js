@@ -11,6 +11,15 @@ export async function getUsers(): Promise<User[]> {
     return response.json();
 }
 
+export async function updateUser(
+    id: number, name: string, email: string, phone: string
+) {
+    await fetch('/api/users', {
+        method: 'PUT',
+        body: JSON.stringify({ id, name, email, phone })
+    });
+}
+
 export async function deleteUser(id: number) {
     await fetch('/api/users', {
         method: 'DELETE',

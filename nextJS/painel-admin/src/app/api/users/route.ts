@@ -24,6 +24,16 @@ export async function POST(request: Request) {
     return NextResponse.json(newUser);
 }
 
+export async function PUT(request: Request) {
+    const { id, name, email, phone } = await request.json();
+
+    users = users.map((user) =>
+        user.id === id ? { ...user, name, email, phone } : user
+    );
+
+    return NextResponse.json({ success: true });
+}
+
 export async function DELETE(request: Request) {
     const { id } = await request.json();
 
