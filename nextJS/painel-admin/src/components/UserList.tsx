@@ -2,9 +2,11 @@
 
 import { useEffect, useState } from "react";
 import { User } from "@/types/User";
+import { PropsToast } from "@/types/PropsToast";
 import { getUsers, deleteUser, updateUser } from "@/services/userService";
 import DeleteModal from "./DeleteModal";
 import EditUserModal from "./EditUserModal";
+import Toast from "./Toast";
 
 export default function UserList({ refetchRef }: any) {
     const [users, setUsers] = useState<User[]>([]);
@@ -12,6 +14,8 @@ export default function UserList({ refetchRef }: any) {
 
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [isEditOpen, setIsEditOpen] = useState(false);
+
+    const [toast, setToast] = useState<PropsToast | null>(null);
     
     async function fetchUsers() {
         const data = await getUsers();
@@ -31,9 +35,15 @@ export default function UserList({ refetchRef }: any) {
     async function handleDelete() {
         if (!selectedUser) return;
 
-        await deleteUser(selectedUser.id);
-        await fetchUsers();
+        try {
+            await deleteUser(selectedUser.id);
+            await fetchUsers();
 
+            setToast({ message: "Usuário deletado!", type: "success" });
+        } catch {
+            setToast({ message: "Erro ao deletar", type: "error" });
+        }
+        
         setIsModalOpen(false);
         setSelectedUser(null);
     }
@@ -46,8 +56,16 @@ export default function UserList({ refetchRef }: any) {
         }
     }, []);
 
+    useEffect(() => {
+        if (toast) {
+            setTimeout(() => setToast(null), 2000);
+        }
+    }, [toast]);
+
     return (
         <div className="flex flex-col">
+            {toast && <Toast message={toast.message} type={toast.type} />}
+
             <p className="text-gray-600 text-xl mb-4 mt-10">Lista de Usuários</p>
 
             <table className="

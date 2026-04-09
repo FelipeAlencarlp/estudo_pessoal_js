@@ -38,7 +38,7 @@ export default function CreateUser({ onUserCreated }: any) {
             method: 'POST',
             body: JSON.stringify({ name, email, phone }),
         });
-
+    
         setName('');
         setEmail('');
         setPhone('');
