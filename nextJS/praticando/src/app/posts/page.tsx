@@ -1,63 +1,70 @@
 import TituloPagina from "@/components/TituloPagina";
-import Link from "next/link";
 import { getPosts } from "@/services/postService";
-import { cacheLife } from "next/cache";
+import { cacheLife, revalidatePath } from "next/cache";
+import Search from "@/components/Search";
+import PostsList from "@/components/PostsList";
+import Link from "next/link";
 
-export default async function Posts() {
-    'use cache';
-    cacheLife({
-        stale: 10,
-        revalidate: 10,
-    });
+export default async function Posts(props: {
+    searchParams?: Promise<{
+        query?: string;
+        page?: string;
+    }>;
+}) {
+    let posts = await getPosts();
+    const searchParams = await props.searchParams;
+    const query = searchParams?.query || '';
+    const currentPage = Number(searchParams?.page) || 1;
 
-    const posts = await getPosts();
-    const postsLimitados = posts.slice(0, 5);
+    const ITEMS_PER_PAGE = 5;
 
-    async function createPost(formData: FormData) {
-        'use server';
-        const title= formData.get('title');
-        console.log(title);
-    }
+    const start = (currentPage - 1) * ITEMS_PER_PAGE;
+    const end = start + ITEMS_PER_PAGE;
+    const totalPages = Math.ceil(posts.length / ITEMS_PER_PAGE);
+
+    const paginatedPosts = posts.slice(start, end);
+
+    posts = query
+        ? posts.filter((item: any) => 
+            item.title.toLowerCase().includes(query.toLowerCase())
+        )
+        : posts;
 
     return (
         <div>
             <TituloPagina>Posts</TituloPagina>
 
-            <div className="flex items-center mb-10">
-                <form action={createPost}>
-                    <h2>Adicionar Novo Post:</h2>
-
-                    <input
-                        type="text"
-                        name="title"
-                        placeholder="Digite o título"
-                        className="border rounded text-white py-1 px-2 mr-2"
-                    />
-                    <button
-                        type="submit"
-                        className="
-                            rounded px-2 py-1
-                            bg-blue-500 hover:bg-blue-400 cursor-pointer
-                        "
-                    >
-                        Adicionar
-                    </button>
-                </form>
-            </div>
+            <Search placeholder="Busque pelo título do Post"/>
 
             <div>
                 <h2 className="text-xl mb-3">Lista de Posts</h2>
 
                 <div className="flex flex-col">
-                    {postsLimitados.map((item: any, i: number) => (
-                        <Link
-                            className="inline-block w-fit"
+                    {paginatedPosts.map((item: any, i: number) => (
+                        <PostsList
                             key={item.id}
-                            href={`/posts/${item.id}`}
-                        >
-                            Título {i + 1}: {item.title}
-                        </Link>
+                            post={item}
+                        />
                     ))}
+                </div>
+
+                <div className="flex gap-4 mt-5">
+                    {currentPage > 1 && (
+                        <Link
+                            className="hover:underline"
+                            href={`/posts?page=${currentPage - 1}`}
+                        >
+                            Anterior
+                        </Link>
+                    )}
+                    {currentPage < totalPages && (
+                        <Link
+                            className="hover:underline"
+                            href={`/posts?page=${currentPage + 1}`}
+                        >
+                            Próximo
+                        </Link>
+                    )}
                 </div>
             </div>
         </div>
