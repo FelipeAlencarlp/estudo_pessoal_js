@@ -4,6 +4,15 @@ const port = 3000;
 
 app.use(express.json()); // Middleware para ler JSON no body
 
+// Middleware criado manualmente
+const methodUrl = (req, res, next) => {
+    console.log(req.method, req.originalUrl);
+    next();
+};
+
+// usando o middleware
+app.use(methodUrl);
+
 let usuarios = [
     {id: 1, nome: 'Felipe'},
     {id: 2, nome: 'Ana'}
