@@ -7,13 +7,18 @@ import { User } from "./interfaces/user.interface";
 export class UsersController {
     constructor(private usersService: UsersService) {}
 
-    @Post()
-    async create(@Body() createUserDto: CreateUserDto) {
-        this.usersService.create(createUserDto);
-    }
-
     @Get()
     async findAll(): Promise<User[]> {
         return this.usersService.findAll();
+    }
+
+    @Post()
+    async create(@Body() createUserDto: CreateUserDto) {
+        this.usersService.create(createUserDto);
+        
+        return {
+            message: 'Usuário criado com sucesso.',
+            data: createUserDto
+        };
     }
 }
