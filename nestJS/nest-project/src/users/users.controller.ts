@@ -1,4 +1,4 @@
-import { Controller, Get, Post, Body, Param, ParseIntPipe, UseGuards } from "@nestjs/common";
+import { Controller, Get, Post, Body, Param, ParseIntPipe, UseGuards, UseInterceptors } from "@nestjs/common";
 import { UsersService } from "./users.service";
 import { CreateUserDto } from "./dto/create-user.dto";
 import { User } from "./interfaces/user.interface";
@@ -16,19 +16,11 @@ export class UsersController {
 
     @Get(':id')
     async findOne(@Param('id', ParseIntPipe) id: number) {
-        return {
-            message: 'Usuário encontrado',
-            data: this.usersService.findOne(id)
-        };
+        return this.usersService.findOne(id);
     }
 
     @Post()
     async create(@Body() createUserDto: CreateUserDto) {
-        this.usersService.create(createUserDto);
-        
-        return {
-            message: 'Usuário criado com sucesso.',
-            data: createUserDto
-        };
+        return this.usersService.create(createUserDto);
     }
 }
