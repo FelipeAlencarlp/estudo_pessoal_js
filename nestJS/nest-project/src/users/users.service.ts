@@ -44,4 +44,34 @@ export class UsersService {
         this.users.push(newUser);
         return newUser;
     }
+
+    update(
+        id: number,
+        nome: string,
+        email: string,
+        idade: number,
+        senha: string
+    ) {
+        const user = this.findOne(id);
+
+        if (!user) {
+            throw new NotFoundException(`Usuário com ID: ${id} não encontrado`);
+        }
+        
+        return this.users = this.users.map((user) =>
+            user.id === id
+                ? { ...user, nome, email, idade, senha }
+                : user
+        );
+    }
+
+    delete(id: number) {
+        const user = this.findOne(id);
+
+        if (!user) {
+            throw new NotFoundException(`Usuário com ID: ${id} não encontrado`);
+        }
+
+        return this.users = this.users.filter((user) => user.id !== id);
+    }
 }
