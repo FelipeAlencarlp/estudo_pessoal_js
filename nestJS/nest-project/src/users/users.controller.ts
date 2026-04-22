@@ -11,11 +11,11 @@ import {
 import { UsersService } from "./users.service";
 import { CreateUserDto } from "./dto/create-user.dto";
 import { User } from "./interfaces/user.interface";
-import { HeaderGuard } from "../header.guard";
+import { AuthGuard } from "../auth/auth.guard";
 import { TransformInterceptor } from "../transform.interceptor";
 
 @Controller('users')
-@UseGuards(HeaderGuard)
+@UseGuards(AuthGuard)
 @UseInterceptors(TransformInterceptor)
 export class UsersController {
     constructor(private usersService: UsersService) {}

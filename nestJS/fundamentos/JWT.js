@@ -1,6 +1,8 @@
 /*
     JWT = JSON Web Token
 
+    Necessário: npm install --save @nestjs/jwt
+
     É um padrão para:
         Identificar usuários de forma segura
         sem guardar sessão no servidor
@@ -64,4 +66,21 @@
                 - buscar dados do usuários logado
                 - verificar permissões
                 - associar ações a um usário
+
+
+    -----------------------------------------------------------
+    Importação global no auth.module.ts:
+        imports: [
+            UsersModule,
+            JwtModule.register({
+                global: true,
+                secret: jwtConstants.secret,
+                signOptions: { expiresIn: '60s' }
+            })
+        ],
+
+        -> Estamos registrando o parâmetro JwtModulecomo global
+           para facilitar as coisas. Isso significa que não
+           precisamos importá-lo em JwtModulenenhum outro
+           lugar do nosso aplicativo.
 */
