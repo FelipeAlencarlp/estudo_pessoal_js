@@ -15,4 +15,8 @@ export class CreateUserDto {
     @IsNumber()
     @IsPositive({ message: 'A idade precisa ser maior que 0.' })
     readonly idade!: number;
+
+    @MinLength(4, { message: 'A senha precisa ter pelo menos 4 caracteres.' })
+    @IsNotEmpty({ message: 'Obrigatório criar uma senha.' })
+    readonly senha!: string;
 }

@@ -1,11 +1,12 @@
-import { Module } from '@nestjs/common';
-import { APP_INTERCEPTOR } from '@nestjs/core';
+import { forwardRef, Module } from '@nestjs/common';
 import { UsersController } from './users.controller';
 import { UsersService } from './users.service';
-import { TransformInterceptor } from './transform.interceptor';
+import { AuthModule } from '../auth/auth.module';
 
 @Module({
+    imports: [forwardRef(() => AuthModule)],
     controllers: [UsersController],
-    providers: [UsersService]
+    providers: [UsersService],
+    exports: [UsersService],
 })
 export class UsersModule {}

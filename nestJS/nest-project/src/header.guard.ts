@@ -7,20 +7,31 @@ import {
 } from '@nestjs/common';
 import { Request } from 'express';
 import { Observable } from 'rxjs';
+import { AuthService } from './auth/auth.service';
 
 @Injectable()
 export class HeaderGuard implements CanActivate {
+  constructor(private readonly authService: AuthService) {}
+
   canActivate(
     context: ExecutionContext,
   ): boolean | Promise<boolean> | Observable<boolean> {
-    // 1. Obter o objeto de requisição (Request)
+    // Obtem o objeto de requisição (Request)
     const request = context.switchToHttp().getRequest();
     const token = this.extractTokenHeader(request);
 
     if (!token) {
-        throw new UnauthorizedException();
+      throw new UnauthorizedException('Token não fornecido');
     }
 
+    const userToken = this.authService.validateFakeToken(token);
+
+    if (!userToken) {
+      throw new UnauthorizedException('Token inválido ou expirado.');
+    }
+
+    // Anexa o usuário à requisição
+    request.user = userToken;
     return true;
   }
 

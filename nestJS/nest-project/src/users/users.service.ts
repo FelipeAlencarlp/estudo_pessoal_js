@@ -3,8 +3,8 @@ import { CreateUserDto } from "./dto/create-user.dto";
 import { User } from "./interfaces/user.interface";
 
 let users = [
-    { id: 1, nome: 'Felipe', email: 'felipe@email.com', idade: 30 },
-    { id: 2, nome: 'Ana', email: 'ana@email.com', idade: 18 },
+    { id: 1, nome: 'admin', email: 'admin@email.com', idade: 30, senha: '123456' },
+    { id: 2, nome: 'Ana', email: 'ana@email.com', idade: 18, senha: '123456' },
 ];
 
 @Injectable()
@@ -20,6 +20,16 @@ export class UsersService {
 
         if (!user) {
             throw new NotFoundException(`Usuário com ID: ${id} não encontrado`);
+        }
+
+        return user;
+    }
+
+    findOneByEmail(email: string) {
+        const user = users.find((user) => user.email === email);
+
+        if (!user) {
+            throw new NotFoundException(`Usuário com E-mail: ${email} não encontrado`);
         }
 
         return user;
